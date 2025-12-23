@@ -1,220 +1,209 @@
-/* PRAJWAL E. PORTFOLIO - INDUSTRIAL ENGINEERING EDITION */
+/* PRAJWAL E. PORTFOLIO - CYBER OPS EDITION */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* ====== 1. SYSTEM BOOT SEQUENCE (Industrial Style) ====== */
+    /* ====== 1. BOOT SEQUENCE (Hacker Style) ====== */
     const bootScreen = document.getElementById('boot-screen');
     const bootText = document.getElementById('boot-text');
-    const loadBar = document.querySelector('.loading-progress');
+    const loader = document.querySelector('.loader-line');
 
-    const bootMessages = [
-        "INITIALIZING CORE SYSTEMS...",
-        "LOADING CAD MODULES...",
-        "CALIBRATING PHYSICS ENGINE...",
-        "SYSTEM ONLINE. WELCOME."
+    const msgs = [
+        "INITIALIZING KERNEL...",
+        "BYPASSING FIREWALL...",
+        "CONNECTING TO GLOBAL GRID...",
+        "ACCESS GRANTED."
     ];
 
-    if (bootScreen && bootText) {
-        let step = 0;
+    if (bootScreen) {
+        let i = 0;
         const interval = setInterval(() => {
-            if (step < bootMessages.length) {
-                bootText.innerText = bootMessages[step];
-                loadBar.style.width = `${(step + 1) * 25}%`;
-                step++;
+            if (i < msgs.length) {
+                bootText.innerText = `> ${msgs[i]}`;
+                loader.style.width = `${(i + 1) * 25}%`;
+                i++;
             } else {
                 clearInterval(interval);
                 setTimeout(() => {
                     bootScreen.classList.add('fade-out');
-                    document.body.style.overflow = 'auto';
-                    setTimeout(() => { bootScreen.style.display = 'none'; }, 500);
+                    setTimeout(() => bootScreen.style.display = 'none', 500);
                 }, 500);
             }
-        }, 800);
+        }, 600);
     }
 
-    /* ====== 2. CAD CURSOR TRACKING SYSTEM ====== */
-    const cursorX = document.getElementById('cursor-x');
-    const cursorY = document.getElementById('cursor-y');
-    const coords = document.getElementById('coordinates');
+    /* ====== 2. RED THREAT MAP BACKGROUND (Canvas) ====== */
+    const canvas = document.getElementById('cyber-map');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let nodes = [];
 
-    if (window.innerWidth > 768) {
-        window.addEventListener('mousemove', (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
-            
-            // Move Lines
-            cursorX.style.left = x + 'px';
-            cursorY.style.top = y + 'px';
+    const resize = () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resize);
+    resize();
 
-            // Update Coords (Fake CAD coordinates)
-            coords.innerText = `X: ${x + 1024} | Y: ${y + 408}`;
+    class Node {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.5; // Slow drift
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() > 0.9 ? 3 : 1.5; // Some large threat nodes
+            this.color = Math.random() > 0.9 ? '#39ff14' : '#ff003c'; // Green or Red
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+    }
+
+    // Create Nodes
+    for (let i = 0; i < 60; i++) nodes.push(new Node());
+
+    const animateMap = () => {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // Trail effect
+        ctx.fillRect(0, 0, width, height);
+
+        nodes.forEach((node, index) => {
+            node.update();
+            node.draw();
+
+            // Draw Lines (Network connections)
+            for (let j = index + 1; j < nodes.length; j++) {
+                const other = nodes[j];
+                const dist = Math.hypot(node.x - other.x, node.y - other.y);
+                if (dist < 150) {
+                    ctx.beginPath();
+                    ctx.moveTo(node.x, node.y);
+                    ctx.lineTo(other.x, other.y);
+                    ctx.strokeStyle = `rgba(255, 0, 60, ${1 - dist / 150})`; // Red lines
+                    ctx.stroke();
+                }
+            }
         });
-    }
+        requestAnimationFrame(animateMap);
+    };
+    animateMap();
 
-    /* ====== 3. GEAR ROTATION ON SCROLL ====== */
-    const gear1 = document.querySelector('.gear-1');
-    const gear2 = document.querySelector('.gear-2');
-    
-    window.addEventListener('scroll', () => {
-        const scrolled = window.scrollY;
-        if(gear1) gear1.style.transform = `rotate(${scrolled * 0.2}deg)`;
-        if(gear2) gear2.style.transform = `rotate(-${scrolled * 0.2}deg)`;
-    });
+    /* ====== 3. HACKER TEXT SCRAMBLE ====== */
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    document.querySelector('h1').onmouseover = event => {
+        let iterations = 0;
+        const originalText = event.target.dataset.text;
+        const interval = setInterval(() => {
+            event.target.innerText = originalText.split("").map((letter, index) => {
+                if (index < iterations) return originalText[index];
+                return letters[Math.floor(Math.random() * 36)];
+            }).join("");
+            if (iterations >= originalText.length) clearInterval(interval);
+            iterations += 1 / 3;
+        }, 30);
+    };
 
-    /* ====== 4. UNIVERSAL MODAL HANDLER ====== */
-    // This handles opening ANY card into a popup
-    
-    // -- A. Specific Modals (Project & Education) --
-    const projectCard = document.querySelector('.project-card');
-    const projectModal = document.getElementById('project-modal');
-    
-    const eduCard = document.getElementById('edu-card');
-    const eduModal = document.getElementById('education-modal');
+    /* ====== 4. UNIFIED POPUP SYSTEM ====== */
+    const modal = document.getElementById('universal-modal');
+    const closeBtn = document.querySelector('.close-btn');
+    const modalTitle = document.getElementById('modal-title');
+    const modalContent = document.getElementById('modal-content');
 
-    // -- B. Generic Info Modals (Profile, Tech, Creative, Social) --
-    const genericModal = document.getElementById('generic-modal');
-    const modalTitle = document.getElementById('modal-heading');
-    const modalBody = document.getElementById('modal-body-content');
-    const modalTags = document.getElementById('modal-tags');
-
-    const openGeneric = (title, tags, htmlContent) => {
+    const openModal = (title, contentHTML) => {
         modalTitle.innerText = title;
-        modalTags.innerHTML = tags.map(t => `<span>${t}</span>`).join('');
-        modalBody.innerHTML = htmlContent;
-        genericModal.classList.add('active');
+        modalContent.innerHTML = contentHTML;
+        modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     };
 
-    // Event Listeners for Cards
-    if(projectCard) projectCard.addEventListener('click', () => {
-        projectModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+    const closeModal = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+    // -- CARD HANDLERS --
+
+    // 1. Education (Loads Template)
+    document.getElementById('edu-card').addEventListener('click', () => {
+        const tmpl = document.getElementById('edu-template').innerHTML;
+        openModal("ACADEMIC LOGS", tmpl);
     });
 
-    if(eduCard) eduCard.addEventListener('click', () => {
-        eduModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        // Animate Timeline
-        const items = eduModal.querySelectorAll('.edu-item');
-        items.forEach((item, index) => {
-            item.classList.remove('show');
-            setTimeout(() => item.classList.add('show'), index * 200);
-        });
+    // 2. Project (Loads Template + Slider logic)
+    document.querySelector('.project-card').addEventListener('click', () => {
+        const tmpl = document.getElementById('project-template').innerHTML;
+        openModal("PROJECT: CURRY MAKER", tmpl);
+        
+        // Re-attach slider logic dynamically
+        window.currentSlide = 0;
+        window.imgs = ["assets/IMG-20251206-WA0058.jpg", "assets/IMG-20251206-WA0058.jpg"];
     });
 
-    // Defining Content for Generic Cards
-    document.getElementById('profile-card')?.addEventListener('click', () => {
-        openGeneric("ENGINEER PROFILE", ["CAD", "AUTOMATION"], 
-            `<p>I am a Mechanical Engineer focused on bridging the gap between physical mechanisms and digital control logic.</p>
-             <br><h3>OBJECTIVE</h3>
-             <p>To design intelligent machines that solve real-world problems using Fusion 360, Python, and rapid prototyping.</p>`
-        );
+    // 3. Generic Cards
+    document.getElementById('profile-card').addEventListener('click', () => {
+        openModal("OPERATOR PROFILE", 
+            `<p>Specializing in <strong>Mechanical Design</strong> and <strong>Automation</strong>.</p>
+             <br><p>> Objective: To secure an internship where physical engineering meets digital intelligence.</p>`);
     });
 
-    document.getElementById('engineering-card')?.addEventListener('click', () => {
-        openGeneric("TECHNICAL ARSENAL", ["DESIGN", "ANALYSIS"], 
-            `<ul>
-                <li><strong>CAD:</strong> Fusion 360, AutoCAD, UG NX</li>
-                <li><strong>CAE:</strong> Hypermesh (FEA Analysis)</li>
-                <li><strong>MFG:</strong> 3D Printing, CNC Basics</li>
-             </ul>`
-        );
+    document.getElementById('engineering-card').addEventListener('click', () => {
+        openModal("WEAPONRY (SKILLS)", 
+            `<ul><li>Fusion 360 (Advanced)</li><li>Hypermesh (Analysis)</li><li>AutoCAD</li></ul>`);
     });
 
-    document.getElementById('creative-card')?.addEventListener('click', () => {
-        openGeneric("VISUAL MEDIA", ["FILM", "DESIGN"], 
-            `<p>Engineering requires communication. I use visual storytelling to present complex technical concepts.</p>
-             <ul><li>Video Editing (DaVinci Resolve)</li><li>Cinematography</li></ul>`
-        );
+    document.getElementById('programming-card').addEventListener('click', () => {
+        openModal("CODE INJECTION", 
+            `<p>Bridging hardware with software.</p><br>
+             <p>> Python: Automation Scripts</p>
+             <p>> C: Embedded Systems</p>`);
     });
 
-    document.getElementById('programming-card')?.addEventListener('click', () => {
-        openGeneric("LOGIC STACK", ["CONTROL", "DATA"], 
-            `<p>Mechanisms need brains. I write code to control hardware.</p>
-             <ul><li><strong>Python:</strong> Automation & Scripts</li><li><strong>C:</strong> Embedded Systems</li></ul>`
-        );
-    });
-
-    document.getElementById('social-card')?.addEventListener('click', () => {
-        openGeneric("SOCIAL IMPACT", ["VOLUNTEER", "LEADERSHIP"], 
-            `<p><strong>CRPF Drive:</strong> Planted 10,000+ trees to combat deforestation.</p>
-             <p><strong>Leadership:</strong> Class Representative for 2 consecutive years.</p>`
-        );
-    });
-
-    /* ====== 5. CLOSE MODAL LOGIC (Universal) ====== */
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        const closeBtn = overlay.querySelector('.close-modal');
-        const closeModal = () => {
-            overlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        };
-
-        if(closeBtn) closeBtn.addEventListener('click', closeModal);
-        overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if(e.key === 'Escape') {
-            document.querySelectorAll('.modal-overlay.active').forEach(m => {
-                m.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
+    // Slider Helper
+    window.changeSlide = function(n) {
+        const img = document.getElementById('modal-img');
+        if(img && window.imgs) {
+            window.currentSlide = (window.currentSlide + n + window.imgs.length) % window.imgs.length;
+            img.src = window.imgs[window.currentSlide];
         }
-    });
+    };
 
-    /* ====== 6. SCROLL REVEAL ANIMATION ====== */
-    const observer = new IntersectionObserver((entries) => {
+    /* ====== 5. SCROLL COUNTERS ====== */
+    const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('show-element');
+                entry.target.classList.remove('hidden-element');
+                entry.target.classList.add('fade-in'); // simple fade
                 
-                // Trigger Counters
                 const counters = entry.target.querySelectorAll('.counter');
-                counters.forEach(counter => {
-                    const target = +counter.getAttribute('data-target');
-                    const updateCount = () => {
-                        const count = +counter.innerText;
+                counters.forEach(c => {
+                    const target = +c.dataset.target;
+                    const update = () => {
+                        const val = +c.innerText;
                         const inc = Math.ceil(target / 50);
-                        if(count < target) {
-                            counter.innerText = count + inc;
-                            setTimeout(updateCount, 20);
-                        } else {
-                            counter.innerText = target;
-                        }
+                        if (val < target) {
+                            c.innerText = val + inc;
+                            setTimeout(update, 20);
+                        } else c.innerText = target;
                     };
-                    updateCount();
+                    update();
                 });
             }
         });
     });
 
-    document.querySelectorAll('.hidden-element').forEach(el => observer.observe(el));
-    document.querySelectorAll('.card').forEach(el => observer.observe(el));
+    document.querySelectorAll('.cyber-card, header').forEach(el => observer.observe(el));
 
-    /* ====== 7. TIME UPDATE ====== */
-    setInterval(() => {
-        const timeBox = document.getElementById('system-time');
-        if(timeBox) timeBox.innerText = new Date().toLocaleTimeString('en-US', {hour12:false});
-    }, 1000);
-
-    /* ====== 8. PROJECT SLIDER LOGIC ====== */
-    let currentSlide = 0;
-    const projectImages = ["assets/IMG-20251206-WA0058.jpg", "assets/IMG-20251206-WA0058.jpg", "assets/IMG-20251206-WA0058.jpg"];
-    const galleryImg = document.getElementById('gallery-img');
-    const counterDisplay = document.getElementById('current-slide');
-
-    window.changeSlide = function(n) {
-        if(!galleryImg) return;
-        galleryImg.style.opacity = 0;
-        setTimeout(() => {
-            currentSlide = (currentSlide + n + projectImages.length) % projectImages.length;
-            galleryImg.src = projectImages[currentSlide];
-            if(counterDisplay) counterDisplay.innerText = currentSlide + 1;
-            galleryImg.style.opacity = 1;
-        }, 200);
-    };
-
-    // Init Icons
-    if(typeof feather !== 'undefined') feather.replace();
+    // Time
+    setInterval(() => document.getElementById('system-time').innerText = new Date().toLocaleTimeString(), 1000);
+    feather.replace();
 });
