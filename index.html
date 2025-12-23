@@ -14,13 +14,14 @@
 
     <div id="boot-screen">
         <div class="terminal-content">
-            <div id="boot-text"></div>
+            <div id="boot-text">INITIALIZING...</div>
             <div class="loader-line"></div>
         </div>
     </div>
 
     <canvas id="cyber-map"></canvas>
-    <div class="scanline-overlay"></div> <div class="vignette"></div>
+    <div class="scanline-overlay"></div>
+    <div class="vignette"></div>
 
     <main class="main-container">
         
@@ -48,9 +49,9 @@
             </div>
         </header>
 
-        <div class="grid-layout hidden-element" id="cards">
+        <div class="grid-layout" id="cards">
             
-            <div class="cyber-card large" id="profile-card">
+            <div class="cyber-card large hidden-element" id="profile-card">
                 <div class="card-decor"></div>
                 <div class="content">
                     <i data-feather="user" class="icon-glow"></i>
@@ -59,7 +60,7 @@
                 </div>
             </div>
 
-            <div class="cyber-card wide project-card">
+            <div class="cyber-card wide project-card hidden-element">
                 <div class="card-bg" style="background-image: url('assets/IMG-20251206-WA0058.jpg');"></div>
                 <div class="overlay-red">
                     <div class="top-tag">CLASSIFIED PROJECT</div>
@@ -68,7 +69,7 @@
                 </div>
             </div>
 
-            <div class="cyber-card" id="engineering-card">
+            <div class="cyber-card hidden-element" id="engineering-card">
                 <div class="card-decor"></div>
                 <div class="content">
                     <i data-feather="tool" class="icon-glow"></i>
@@ -82,7 +83,7 @@
                 </div>
             </div>
 
-            <div class="cyber-card" id="creative-card">
+            <div class="cyber-card hidden-element" id="creative-card">
                 <div class="card-decor"></div>
                 <div class="content">
                     <i data-feather="camera" class="icon-glow"></i>
@@ -95,7 +96,7 @@
                 </div>
             </div>
 
-            <div class="cyber-card tall" id="programming-card">
+            <div class="cyber-card tall hidden-element" id="programming-card">
                 <div class="card-decor"></div>
                 <div class="content">
                     <i data-feather="code" class="icon-glow"></i>
@@ -109,7 +110,7 @@
                 </div>
             </div>
 
-            <div class="cyber-card" id="edu-card">
+            <div class="cyber-card hidden-element" id="edu-card">
                 <div class="card-decor"></div>
                 <div class="content">
                     <i data-feather="database" class="icon-glow"></i>
@@ -124,7 +125,7 @@
                 </div>
             </div>
 
-            <div class="cyber-card" id="social-card">
+            <div class="cyber-card hidden-element" id="social-card">
                 <div class="card-decor"></div>
                 <div class="content">
                     <i data-feather="activity" class="icon-glow"></i>
@@ -140,7 +141,7 @@
                 </div>
             </div>
 
-            <div class="cyber-card wide">
+            <div class="cyber-card wide hidden-element">
                 <div class="card-decor"></div>
                 <div class="content">
                     <i data-feather="award" class="icon-glow"></i>
