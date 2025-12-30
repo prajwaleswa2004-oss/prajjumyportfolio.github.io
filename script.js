@@ -1,236 +1,471 @@
-/* PRAJWAL E. PORTFOLIO - CYBER OPS EDITION */
+/* Prajwal E. Portfolio Main JavaScript 
+   Aligned with Index.html & Style.css
+*/
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* ====== 1. BOOT SEQUENCE (Hacker Style) ====== */
+    /* ====== 
+       0. NATURAL CURSOR RESTORATION
+    ====== */
+    document.body.style.cursor = 'default';
+    const linksAndBtns = document.querySelectorAll('a, button, .card, .trigger-modal');
+    linksAndBtns.forEach(el => el.style.cursor = 'pointer');
+
+    /* ====== 
+       1. SYSTEM BOOT SEQUENCE
+    ====== */
     const bootScreen = document.getElementById('boot-screen');
     const bootText = document.getElementById('boot-text');
-    const loader = document.querySelector('.loader-line');
 
-    const msgs = [
-        "INITIALIZING KERNEL...",
-        "BYPASSING FIREWALL...",
-        "CONNECTING TO GLOBAL GRID...",
-        "ACCESS GRANTED."
+    const bootMessages = [
+        "> INITIALIZING PORTFOLIO...",
+        "> LOADING PROJECT ARCHIVES...",
+        "> WELCOME, PRAJWAL."
     ];
 
-    if (bootScreen) {
-        let i = 0;
-        const interval = setInterval(() => {
-            if (i < msgs.length) {
-                if(bootText) bootText.innerText = `> ${msgs[i]}`;
-                if(loader) loader.style.width = `${(i + 1) * 25}%`;
-                i++;
+    if (bootScreen && bootText) {
+        setTimeout(() => {
+            if (bootScreen.style.display !== 'none') {
+                bootScreen.classList.add('fade-out');
+                document.body.style.overflow = 'auto';
+                setTimeout(() => { bootScreen.style.display = 'none'; }, 500);
+            }
+        }, 4000);
+
+        let lineIndex = 0;
+        const typeLine = () => {
+            if (lineIndex < bootMessages.length) {
+                const line = document.createElement('div');
+                line.className = 'boot-line';
+                line.textContent = bootMessages[lineIndex];
+                bootText.appendChild(line);
+                lineIndex++;
+                setTimeout(typeLine, 200);
             } else {
-                clearInterval(interval);
                 setTimeout(() => {
                     bootScreen.classList.add('fade-out');
-                    setTimeout(() => bootScreen.style.display = 'none', 500);
+                    document.body.style.overflow = 'auto';
+                    setTimeout(() => { bootScreen.style.display = 'none'; }, 500);
                 }, 500);
             }
-        }, 600);
+        };
+        typeLine();
     }
 
-    /* ====== 2. RED THREAT MAP BACKGROUND (Canvas) ====== */
-    const canvas = document.getElementById('cyber-map');
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let nodes = [];
+    /* ====== 
+       2. FEA MESH NETWORK (Restored)
+    ====== */
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.zIndex = '-1';
+    canvas.style.background = 'radial-gradient(circle at center, #1a1a1a 0%, #000000 100%)';
+    document.body.appendChild(canvas);
 
-        const resize = () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        };
-        window.addEventListener('resize', resize);
-        resize();
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
 
-        class Node {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.radius = Math.random() > 0.9 ? 3 : 1.5;
-                this.color = Math.random() > 0.9 ? '#39ff14' : '#ff003c';
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
+    const isMobile = window.innerWidth <= 768;
+    const particleCount = isMobile ? 40 : 80;
+    const connectionDistance = isMobile ? 100 : 150;
+    const mouseDistance = 200;
+
+    const resize = () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 1.5;
+            this.vy = (Math.random() - 0.5) * 1.5;
+            this.size = Math.random() * 2 + 1;
         }
-
-        for (let i = 0; i < 60; i++) nodes.push(new Node());
-
-        const animateMap = () => {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.fillRect(0, 0, width, height);
-
-            nodes.forEach((node, index) => {
-                node.update();
-                node.draw();
-                for (let j = index + 1; j < nodes.length; j++) {
-                    const other = nodes[j];
-                    const dist = Math.hypot(node.x - other.x, node.y - other.y);
-                    if (dist < 150) {
-                        ctx.beginPath();
-                        ctx.moveTo(node.x, node.y);
-                        ctx.lineTo(other.x, other.y);
-                        ctx.strokeStyle = `rgba(255, 0, 60, ${1 - dist / 150})`;
-                        ctx.stroke();
-                    }
-                }
-            });
-            requestAnimationFrame(animateMap);
-        };
-        animateMap();
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(74, 222, 128, 0.5)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
     }
 
-    /* ====== 3. HACKER TEXT SCRAMBLE ====== */
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    let mouse = { x: null, y: null };
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+    window.addEventListener('touchmove', (e) => {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+    });
+
+    const animate = () => {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach((p, index) => {
+            p.update();
+            p.draw();
+            for (let j = index; j < particles.length; j++) {
+                const dx = p.x - particles[j].x;
+                const dy = p.y - particles[j].y;
+                const distance = Math.hypot(dx, dy);
+                if (distance < connectionDistance) {
+                    ctx.beginPath();
+                    const opacity = 1 - (distance / connectionDistance);
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.15})`;
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+            if (mouse.x != null) {
+                const dx = p.x - mouse.x;
+                const dy = p.y - mouse.y;
+                const distance = Math.hypot(dx, dy);
+                if (distance < mouseDistance) {
+                    ctx.beginPath();
+                    const opacity = 1 - (distance / mouseDistance);
+                    ctx.strokeStyle = `rgba(74, 222, 128, ${opacity * 0.4})`;
+                    ctx.lineWidth = 2;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.stroke();
+                }
+            }
+        });
+        requestAnimationFrame(animate);
+    };
+    animate();
+
+    /* ====== 
+       3. SYNCHRO-GEAR SCROLL
+    ====== */
+    const gear1 = document.querySelector('.gear-1');
+    const gear2 = document.querySelector('.gear-2');
+    if (gear1 && gear2) {
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            gear1.style.transform = `rotate(${scrollY / 10}deg)`;
+            gear2.style.transform = `rotate(${scrollY / -5}deg)`;
+        });
+    }
+
+    /* ====== 
+       4. DECIPHER TEXT
+    ====== */
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const h1 = document.querySelector('h1');
-    if(h1) {
-        h1.onmouseover = event => {
+    const headers = document.querySelectorAll('.card h3');
+    headers.forEach(header => {
+        header.addEventListener('mouseenter', event => {
             let iterations = 0;
-            const originalText = event.target.dataset.text;
+            const originalText = event.target.dataset.value || event.target.innerText;
+            if (!event.target.dataset.value) event.target.dataset.value = event.target.innerText;
+
             const interval = setInterval(() => {
-                event.target.innerText = originalText.split("").map((letter, index) => {
-                    if (index < iterations) return originalText[index];
-                    return letters[Math.floor(Math.random() * 36)];
-                }).join("");
+                event.target.innerText = originalText.split("")
+                    .map((letter, index) => {
+                        if (index < iterations) return originalText[index];
+                        return letters[Math.floor(Math.random() * 36)];
+                    })
+                    .join("");
                 if (iterations >= originalText.length) clearInterval(interval);
                 iterations += 1 / 3;
             }, 30);
-        };
-    }
-
-    /* ====== 4. UNIFIED POPUP SYSTEM ====== */
-    const modal = document.getElementById('universal-modal');
-    const closeBtn = document.querySelector('.close-btn');
-    const modalTitle = document.getElementById('modal-title');
-    const modalContent = document.getElementById('modal-content');
-
-    const openModal = (title, contentHTML) => {
-        if(!modal) return;
-        modalTitle.innerText = title;
-        modalContent.innerHTML = contentHTML;
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    };
-
-    const closeModal = () => {
-        if(!modal) return;
-        modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    };
-
-    if(closeBtn) closeBtn.addEventListener('click', closeModal);
-    if(modal) modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-
-    // -- CARD HANDLERS --
-    const safeAddListener = (id, callback) => {
-        const el = document.getElementById(id) || document.querySelector(id);
-        if(el) el.addEventListener('click', callback);
-    };
-
-    // 1. Education
-    safeAddListener('#edu-card', () => {
-        const tmpl = document.getElementById('edu-template').innerHTML;
-        openModal("ACADEMIC LOGS", tmpl);
-    });
-
-    // 2. Project
-    safeAddListener('.project-card', () => {
-        const tmpl = document.getElementById('project-template').innerHTML;
-        openModal("PROJECT: CURRY MAKER", tmpl);
-        window.currentSlide = 0;
-        window.imgs = ["assets/IMG-20251206-WA0058.jpg", "assets/IMG-20251206-WA0058.jpg"];
-    });
-
-    // 3. Generic Cards
-    safeAddListener('#profile-card', () => {
-        openModal("OPERATOR PROFILE", 
-            `<p>Specializing in <strong>Mechanical Design</strong> and <strong>Automation</strong>.</p>
-             <br><p>> Objective: To secure an internship where physical engineering meets digital intelligence.</p>`);
-    });
-
-    safeAddListener('#engineering-card', () => {
-        openModal("WEAPONRY (SKILLS)", 
-            `<ul><li>Fusion 360 (Advanced)</li><li>Hypermesh (Analysis)</li><li>AutoCAD</li></ul>`);
-    });
-
-    safeAddListener('#programming-card', () => {
-        openModal("CODE INJECTION", 
-            `<p>Bridging hardware with software.</p><br>
-             <p>> Python: Automation Scripts</p>
-             <p>> C: Embedded Systems</p>`);
-    });
-    
-    // Social
-    safeAddListener('#social-card', () => {
-        openModal("FIELD OPERATIONS", 
-            `<p>Impact Reports:</p>
-             <p>> 10,000+ Trees Planted (CRPF Drive)</p>
-             <p>> 2 Years Class Representative Leadership</p>`);
-    });
-    
-    // Creative
-    safeAddListener('#creative-card', () => {
-        openModal("SURVEILLANCE MEDIA", 
-            `<p>Visual Documentation Skills:</p>
-             <p>> DaVinci Resolve Editing</p>
-             <p>> Cinematography & Storytelling</p>`);
-    });
-
-    // Slider Helper
-    window.changeSlide = function(n) {
-        const img = document.getElementById('modal-img');
-        if(img && window.imgs) {
-            window.currentSlide = (window.currentSlide + n + window.imgs.length) % window.imgs.length;
-            img.src = window.imgs[window.currentSlide];
-        }
-    };
-
-    /* ====== 5. SCROLL COUNTERS ====== */
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.remove('hidden-element');
-                entry.target.classList.add('fade-in'); 
-                
-                const counters = entry.target.querySelectorAll('.counter');
-                counters.forEach(c => {
-                    const target = +c.dataset.target;
-                    const update = () => {
-                        const val = +c.innerText;
-                        const inc = Math.ceil(target / 50);
-                        if (val < target) {
-                            c.innerText = val + inc;
-                            setTimeout(update, 20);
-                        } else c.innerText = target;
-                    };
-                    update();
-                });
-            }
         });
     });
 
-    // Observe everything
-    document.querySelectorAll('.cyber-card, header').forEach(el => observer.observe(el));
+    /* ====== 
+       6. SPOTLIGHT
+    ====== */
+    const cardsContainer = document.getElementById("cards");
+    const cards = document.querySelectorAll(".card");
+    if (cardsContainer && window.innerWidth > 768) {
+        cardsContainer.addEventListener("mousemove", (e) => {
+            for (const card of cards) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty("--mouse-x", `${x}px`);
+                card.style.setProperty("--mouse-y", `${y}px`);
+            }
+        });
+    }
 
-    // Time
-    setInterval(() => {
-        const t = document.getElementById('system-time');
-        if(t) t.innerText = new Date().toLocaleTimeString();
-    }, 1000);
+    /* ====== 
+       7. PROJECT MODAL & SLIDER
+    ====== */
+    const projectCard = document.querySelector('.project-card');
+    const projectModal = document.getElementById('project-modal');
     
+    const projectImages = [
+        "assets/IMG-20251206-WA0058.jpg",
+        "assets/IMG-20251206-WA0058.jpg",
+        "assets/IMG-20251206-WA0058.jpg"
+    ];
+    let currentSlide = 0;
+    const galleryImg = document.getElementById('gallery-img');
+    const counterDisplay = document.getElementById('current-slide');
+
+    window.changeSlide = function (direction) {
+        if (!galleryImg) return;
+        galleryImg.style.opacity = 0;
+        setTimeout(() => {
+            currentSlide += direction;
+            if (currentSlide >= projectImages.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = projectImages.length - 1;
+            galleryImg.src = projectImages[currentSlide];
+            if (counterDisplay) counterDisplay.innerText = currentSlide + 1;
+            galleryImg.style.opacity = 1;
+        }, 300);
+    };
+
+    if (projectCard && projectModal) {
+        projectCard.addEventListener('click', (e) => {
+            e.preventDefault();
+            projectModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    /* ====== 
+       8. EDUCATION MODAL
+    ====== */
+    const eduCard = document.getElementById('edu-card');
+    const eduModal = document.getElementById('education-modal');
+    const eduItems = document.querySelectorAll('.edu-item');
+
+    if (eduCard && eduModal) {
+        eduCard.addEventListener('click', () => {
+            eduModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            eduItems.forEach((item, index) => {
+                item.classList.remove('show');
+                setTimeout(() => item.classList.add('show'), index * 300);
+            });
+        });
+    }
+
+    /* ====== 
+       9. UNIFIED MODAL CLOSE HANDLER
+    ====== */
+    const allModals = document.querySelectorAll('.modal-overlay');
+
+    const closeGenericModal = (modal) => {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        const items = modal.querySelectorAll('.edu-item.show');
+        items.forEach(i => i.classList.remove('show'));
+    };
+
+    allModals.forEach(modal => {
+        const closeBtn = modal.querySelector('.close-modal, .close-education');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => closeGenericModal(modal));
+        }
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeGenericModal(modal);
+        });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const activeModal = document.querySelector('.modal-overlay.active');
+            if (activeModal) closeGenericModal(activeModal);
+        }
+    });
+
+    /* ====== 
+       10. SCROLL REVEAL & COUNTERS
+    ====== */
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                if (entry.target.classList.contains('hidden-element')) {
+                    entry.target.classList.add('show-element');
+                }
+                const counters = entry.target.querySelectorAll('.counter');
+                if (counters.length > 0) {
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const updateCount = () => {
+                            const count = +counter.innerText;
+                            const inc = Math.max(1, target / 100);
+                            if (count < target) {
+                                counter.innerText = Math.ceil(count + inc);
+                                setTimeout(updateCount, 25);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCount();
+                    });
+                }
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.hidden-element').forEach((el) => observer.observe(el));
+    document.querySelectorAll('.card').forEach((el) => {
+        if(el.querySelector('.counter')) observer.observe(el);
+    });
+
+    /* ====== 
+       11. GENERIC INFO MODAL
+    ====== */
+    const infoModal = document.getElementById('info-modal');
+    const infoTitle = document.getElementById('info-title');
+    const infoBody = document.getElementById('info-body');
+    const infoTags = document.getElementById('info-tags');
+
+    if (infoModal) {
+        const openInfoModal = (title, tags = [], bodyHTML = "") => {
+            infoTitle.innerText = title;
+            infoTags.innerHTML = tags.map(t => `<span>${t}</span>`).join('');
+            infoBody.innerHTML = bodyHTML;
+            infoModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        // Profile Card
+        document.getElementById('profile-card')?.addEventListener('click', () => {
+            openInfoModal(
+                "The Profile",
+                ["Mechanical Engineer", "Designer", "Innovator"],
+                `<p>I am an aspiring Mechanical Engineer skilled in CAD modelling, mechanism design, and automation. Seeking an internship to apply practical engineering skills in real-world product development and smart machine projects.</p>
+                 <br>
+                 <h3>Core Focus</h3>
+                 <ul>
+                    <li>Designing automated systems using Fusion 360</li>
+                    <li>Merging hardware with software logic</li>
+                    <li>Visualizing complex engineering concepts</li>
+                 </ul>`
+            );
+        });
+
+        // Engineering Card
+        document.getElementById('engineering-card')?.addEventListener('click', () => {
+            openInfoModal(
+                "Engineering Skills",
+                ["CAD", "Manufacturing", "Analysis"],
+                `<p>My engineering toolkit is built for prototyping and production.</p>
+                 <ul>
+                    <li><strong>Fusion 360:</strong> Advanced parametric modeling and assembly.</li>
+                    <li><strong>AutoCAD & UG NX:</strong> Industry-standard drafting.</li>
+                    <li><strong>Hypermesh:</strong> Finite Element Analysis (FEA).</li>
+                    <li><strong>3D Printing:</strong> Rapid prototyping from digital mesh to physical object.</li>
+                 </ul>`
+            );
+        });
+
+        // Creative Card
+        document.getElementById('creative-card')?.addEventListener('click', () => {
+            openInfoModal(
+                "Creative Works",
+                ["Filmmaking", "Photography", "Design"],
+                `<p>Engineering builds the product; creativity tells its story. I specialize in:</p>
+                 <ul>
+                    <li><strong>Video Editing:</strong> Creating compelling narratives using Davinci Resolve.</li>
+                    <li><strong>Short Films:</strong> Directing and shooting visual stories.</li>
+                    <li><strong>Photography:</strong> Capturing industrial and natural aesthetics.</li>
+                    <li><strong>Sketching:</strong> Concept art and visualization.</li>
+                 </ul>`
+            );
+        });
+
+        // Programming Card
+        document.getElementById('programming-card')?.addEventListener('click', () => {
+            openInfoModal(
+                "Programming Stack",
+                ["Automation", "Logic", "Embedded"],
+                `<p>I use code to control machinery and analyze data.</p>
+                 <ul>
+                    <li><strong>Python:</strong> Automation scripts and data processing.</li>
+                    <li><strong>C Language:</strong> Embedded programming for microcontrollers.</li>
+                    <li><strong>Java:</strong> Object-oriented software development.</li>
+                 </ul>
+                 <p>Currently integrating IoT solutions with mechanical designs.</p>`
+            );
+        });
+
+        // Social Impact Card
+        document.getElementById('social-card')?.addEventListener('click', () => {
+            openInfoModal(
+                "Social Impact",
+                ["Volunteering", "Leadership"],
+                `<p>Engineering serves society. My contributions include:</p>
+                 <h3>CRPF Mega Plantation Drive</h3>
+                 <p>Volunteered in a massive drive planting over 10,000 trees, managing logistics and irrigation planning.</p>
+                 <br>
+                 <h3>Student Leadership</h3>
+                 <p>Served as Class Representative for 2 semesters, bridging the gap between faculty and students and organizing technical workshops.</p>`
+            );
+        });
+    }
+
+    /* ====== 
+       12. TIME
+    ====== */
+    function updateTime() {
+        const timeDisplay = document.getElementById('system-time');
+        if (timeDisplay) timeDisplay.innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
     if (typeof feather !== 'undefined') feather.replace();
+
+    /* ====== 
+       13. TAB TITLE TICKER
+    ====== */
+    const titleAlt = ["System Online", "Engineer", "Creator", "Open for Internships"];
+    let titleIndex = 0;
+    setInterval(() => {
+        if (document.hidden) {
+            document.title = "Connection Lost...";
+        } else {
+            titleIndex = (titleIndex + 1) % titleAlt.length;
+            document.title = `Prajwal E. | ${titleAlt[titleIndex]}`;
+        }
+    }, 2500);
+
+    /* ====== 
+       14. BLUEPRINT TOGGLE
+    ====== */
+    const bpToggle = document.getElementById('blueprint-toggle');
+    if (bpToggle) {
+        bpToggle.addEventListener('click', () => {
+            document.body.classList.toggle('blueprint-active');
+            if (document.body.classList.contains('blueprint-active')) {
+                bpToggle.innerText = "SCHEMATIC";
+                bpToggle.style.background = "transparent";
+                bpToggle.style.color = "#fff";
+                bpToggle.style.border = "1px solid #fff";
+            } else {
+                bpToggle.innerText = "RENDER";
+                bpToggle.style.background = "#4ade80";
+                bpToggle.style.color = "#000";
+                bpToggle.style.border = "none";
+            }
+        });
+    }
 });
