@@ -29,25 +29,83 @@
     </div>
 
     <main class="main-container">
-        <div class="bento-grid" id="cards">
+        <header class="fade-in hidden-element">
+            <div class="profile-header">
+                <div class="profile-img-container">
+                    <img src="assets/profile.jpg" alt="Prajwal E." class="profile-avatar" onerror="this.style.display='none'">
+                </div>
+                <div>
+                    <h1>Prajwal E.</h1>
+                    <p class="subtitle">Mechanical Engineer & Visual Storyteller</p>
+                    <div class="status-pill">
+                        <span class="dot"></span> Open for Internships
+                    </div>
+                </div>
+            </div>
+            <div class="contact-links">
+                <a href="mailto:prajwaleswa2004@gmail.com">Email</a>
+                <a href="https://linkedin.com/in/prajwal-esvi-0a9514321">LinkedIn</a>
+                <a href="assets/Prajwal resume.pdf" target="_blank" class="resume-btn" title="Download Resume">
+                    <span>Resume</span>
+                    <i data-feather="download"></i>
+                </a>
+            </div>
+        </header>
+
+        <div class="bento-grid hidden-element" id="cards">
             
-            <div class="card card-wide" id="hero-card">
-                <div class="hero-layout">
-                    <img src="assets/profile.jpg" alt="Prajwal E." class="hero-avatar" onerror="this.style.display='none'">
-                    <div class="hero-info">
-                        <h1>Prajwal E.</h1>
-                        <p class="subtitle">Mechanical Engineer & Visual Storyteller</p>
-                        <div class="status-pill">
-                            <span class="dot"></span> Open for Internships
-                        </div>
-                        <div class="contact-links mt-3">
-                            <a href="mailto:prajwaleswa2004@gmail.com">Email</a>
-                            <a href="https://linkedin.com/in/prajwal-esvi-0a9514321">LinkedIn</a>
-                            <a href="assets/Prajwal_E_Resume.pdf" target="_blank" class="resume-btn" title="Download Resume">
-                                <span>Resume</span>
-                                <i data-feather="download"></i>
-                            </a>
-                        </div>
+            <div class="card card-large" id="profile-card">
+                <div class="card-content">
+                    <div class="icon-box"><i data-feather="user"></i></div>
+                    <h3>The Profile</h3>
+                    <p>3rd Year Mechanical Engineering student at JNTUA. Passionate about smart product design, automation, and visual storytelling.</p>
+                </div>
+            </div>
+
+            <div class="card card-wide project-card">
+                <div class="card-bg-image" style="background-image: url('assets/IMG-20251206-WA0058.jpg');"></div>
+                <div class="card-content overlay-dark">
+                    <div class="badge">Major Project</div>
+                    <h3>Automated Curry Maker</h3>
+                    <p>Designed in Fusion 360. Features rotating spoon mechanism, slotted lid timing, and ingredient-release systems.</p>
+                </div>
+            </div>
+
+            <div class="card" id="engineering-card">
+                <div class="card-content">
+                    <div class="icon-box"><i data-feather="tool"></i></div>
+                    <h3>Engineering</h3>
+                    <ul class="skill-list">
+                        <li>Fusion 360</li>
+                        <li>AutoCAD & UG NX</li>
+                        <li>Hypermesh</li>
+                        <li>3D Printing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" id="creative-card">
+                <div class="card-content">
+                    <div class="icon-box"><i data-feather="camera"></i></div>
+                    <h3>Creative</h3>
+                    <ul class="skill-list">
+                        <li>Video Editing</li>
+                        <li>Photography</li>
+                        <li>Short Films</li>
+                        <li>Sketching</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card card-tall" id="programming-card">
+                <div class="card-content">
+                    <div class="icon-box"><i data-feather="code"></i></div>
+                    <h3>Programming</h3>
+                    <p>Bridging the gap between hardware and software.</p>
+                    <div class="tags">
+                        <span>Python</span>
+                        <span>Java</span>
+                        <span>C Language</span>
                     </div>
                 </div>
             </div>
@@ -74,64 +132,36 @@
                             <div class="tracker-info">
                                 <span class="date">2021 - 2022</span>
                                 <strong>Intermediate</strong>
+                                <span class="school">S.K Govt Junior College</span>
+                            </div>
+                        </div>
+                        <div class="tracker-item">
+                            <div class="tracker-dot"></div>
+                            <div class="tracker-info">
+                                <span class="date">2021</span>
+                                <strong>SSC</strong>
+                                <span class="school">A.P. Model School</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card" id="profile-card">
+            <div class="card" id="social-card">
                 <div class="card-content">
-                    <div class="icon-box"><i data-feather="user"></i></div>
-                    <h3>The Profile</h3>
-                    <p>3rd Year Mechanical Engineering student. Passionate about smart product design, automation, and visual storytelling.</p>
-                </div>
-            </div>
-
-            <div class="card" id="engineering-card">
-                <div class="card-content">
-                    <div class="icon-box"><i data-feather="tool"></i></div>
-                    <h3>Engineering</h3>
-                    <ul class="skill-list">
-                        <li>Fusion 360</li>
-                        <li>AutoCAD & UG NX</li>
-                        <li>Hypermesh</li>
-                        <li>3D Printing</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card" id="programming-card">
-                <div class="card-content">
-                    <div class="icon-box"><i data-feather="code"></i></div>
-                    <h3>Programming</h3>
-                    <p>Bridging hardware & software.</p>
-                    <div class="tags">
-                        <span>Python</span>
-                        <span>Java</span>
-                        <span>C Lang</span>
+                    <div class="icon-box"><i data-feather="heart"></i></div>
+                    <h3>Social Impact</h3>
+                    <div class="impact-item">
+                        <span class="impact-label">CRPF Mega Drive</span>
+                        <p class="impact-stat"><span class="counter" data-target="10000">0</span>+ Trees</p>
+                        <p class="impact-role">Active Volunteer Participant</p>
                     </div>
-                </div>
-            </div>
-
-            <div class="card card-wide project-card">
-                <div class="card-bg-image" style="background-image: url('assets/IMG-20251206-WA0058.jpg');"></div>
-                <div class="card-content overlay-dark">
-                    <div class="badge">Major Project</div>
-                    <h3>Automated Curry Maker</h3>
-                    <p>Designed in Fusion 360. Features rotating spoon mechanism, slotted lid timing, and ingredient-release systems.</p>
-                </div>
-            </div>
-
-            <div class="card" id="creative-card">
-                <div class="card-content">
-                    <div class="icon-box"><i data-feather="camera"></i></div>
-                    <h3>Creative</h3>
-                    <ul class="skill-list">
-                        <li>Video Editing</li>
-                        <li>Photography</li>
-                        <li>Short Films</li>
-                    </ul>
+                    <div class="spacer"></div>
+                    <div class="impact-item">
+                        <span class="impact-label">Student Leadership</span>
+                        <p class="impact-stat"><span class="counter" data-target="2">0</span> Semesters</p>
+                        <p class="impact-role">Class Representative</p>
+                    </div>
                 </div>
             </div>
 
@@ -146,23 +176,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card" id="social-card">
-                <div class="card-content">
-                    <div class="icon-box"><i data-feather="heart"></i></div>
-                    <h3>Social Impact</h3>
-                    <div class="impact-item">
-                        <span class="impact-label">CRPF Mega Drive</span>
-                        <p class="impact-stat"><span class="counter" data-target="10000">0</span>+ Trees</p>
-                    </div>
-                    <div class="spacer"></div>
-                    <div class="impact-item">
-                        <span class="impact-label">Leadership</span>
-                        <p class="impact-stat"><span class="counter" data-target="2">0</span> Semesters</p>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <footer>
@@ -232,6 +245,7 @@
             </div>
             <div class="modal-body">
                 <div class="education-timeline">
+                    
                     <div class="edu-item">
                         <div class="edu-dot"></div>
                         <div class="edu-content">
@@ -241,17 +255,24 @@
                             <ul>
                                 <li>Major Project: Automated Curry Maker</li>
                                 <li>Focus on Design & Automation</li>
+                                <li>Active Member: Art & Crafts Club</li>
                             </ul>
                         </div>
                     </div>
+
                     <div class="edu-item">
                         <div class="edu-dot"></div>
                         <div class="edu-content">
                             <span class="edu-date">2021 – 2022</span>
                             <h3>Intermediate (MPC)</h3>
                             <p>S.K Govt Junior College</p>
+                            <ul>
+                                <li>Core Subjects: Maths, Physics, Chemistry</li>
+                                <li>Academic Excellence in Mechanics</li>
+                            </ul>
                         </div>
                     </div>
+
                     <div class="edu-item">
                         <div class="edu-dot"></div>
                         <div class="edu-content">
@@ -260,6 +281,7 @@
                             <p>A.P Model School</p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
