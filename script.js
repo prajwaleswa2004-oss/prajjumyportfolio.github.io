@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ====== 
        0. NATURAL CURSOR RESTORATION
+       (Overrides CSS 'cursor: none' for natural feel)
     ====== */
     document.body.style.cursor = 'default';
     const linksAndBtns = document.querySelectorAll('a, button, .card, .trigger-modal');
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     if (bootScreen && bootText) {
+        // FAIL-SAFE: Force remove screen after 4 seconds
         setTimeout(() => {
             if (bootScreen.style.display !== 'none') {
                 bootScreen.classList.add('fade-out');
@@ -32,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }, 4000);
 
+        // Typing Animation
         let lineIndex = 0;
         const typeLine = () => {
             if (lineIndex < bootMessages.length) {
@@ -53,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ====== 
-       2. FEA MESH NETWORK (Restored)
+       2. FEA MESH NETWORK (Background Simulation)
     ====== */
     const canvas = document.createElement('canvas');
     canvas.style.position = 'fixed';
@@ -156,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     animate();
 
     /* ====== 
-       3. SYNCHRO-GEAR SCROLL
+       3. SYNCHRO-GEAR SCROLL ENGINE
     ====== */
     const gear1 = document.querySelector('.gear-1');
     const gear2 = document.querySelector('.gear-2');
@@ -169,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ====== 
-       4. DECIPHER TEXT
+       4. DECIPHER TEXT EFFECT (Hacker Style)
     ====== */
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     const headers = document.querySelectorAll('.card h3');
@@ -193,7 +196,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ====== 
-       6. SPOTLIGHT
+       5. TYPEWRITER EFFECT
+    ====== */
+    const subtitle = document.querySelector(".subtitle");
+    if (subtitle) {
+        const text = "Mechanical Engineer & Visual Storyteller";
+        subtitle.textContent = "";
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                subtitle.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 40);
+            }
+        }
+        setTimeout(typeWriter, 2500);
+    }
+
+    /* ====== 
+       6. SPOTLIGHT (Card Hover Effect)
     ====== */
     const cardsContainer = document.getElementById("cards");
     const cards = document.querySelectorAll(".card");
@@ -215,6 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const projectCard = document.querySelector('.project-card');
     const projectModal = document.getElementById('project-modal');
     
+    // Project Slider Logic
     const projectImages = [
         "assets/IMG-20251206-WA0058.jpg",
         "assets/IMG-20251206-WA0058.jpg",
@@ -246,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ====== 
-       8. EDUCATION MODAL
+       8. EDUCATION MODAL (Standardized Logic)
     ====== */
     const eduCard = document.getElementById('edu-card');
     const eduModal = document.getElementById('education-modal');
@@ -257,6 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
             eduModal.classList.add('active');
             document.body.style.overflow = 'hidden';
 
+            // Trigger Timeline Animation
             eduItems.forEach((item, index) => {
                 item.classList.remove('show');
                 setTimeout(() => item.classList.add('show'), index * 300);
@@ -264,28 +287,35 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* ====== 
+    /* =========================================
        9. UNIFIED MODAL CLOSE HANDLER
-    ====== */
+       Handles: Project, Education, and Info Modals
+    ========================================= */
     const allModals = document.querySelectorAll('.modal-overlay');
 
     const closeGenericModal = (modal) => {
         modal.classList.remove('active');
         document.body.style.overflow = 'auto';
+
+        // Reset Education Animations if present
         const items = modal.querySelectorAll('.edu-item.show');
         items.forEach(i => i.classList.remove('show'));
     };
 
     allModals.forEach(modal => {
+        // 1. Close Button Click
         const closeBtn = modal.querySelector('.close-modal, .close-education');
         if (closeBtn) {
             closeBtn.addEventListener('click', () => closeGenericModal(modal));
         }
+
+        // 2. Click Outside (Background)
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeGenericModal(modal);
         });
     });
 
+    // 3. Global ESC Key Handler
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             const activeModal = document.querySelector('.modal-overlay.active');
@@ -330,7 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ====== 
-       11. GENERIC INFO MODAL
+       11. GENERIC INFO MODAL SYSTEM (Populator)
     ====== */
     const infoModal = document.getElementById('info-modal');
     const infoTitle = document.getElementById('info-title');
@@ -423,7 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ====== 
-       12. TIME
+       12. SYSTEM TIME & ICONS
     ====== */
     function updateTime() {
         const timeDisplay = document.getElementById('system-time');
@@ -449,7 +479,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2500);
 
     /* ====== 
-       14. BLUEPRINT TOGGLE
+       14. BLUEPRINT MODE TOGGLE
     ====== */
     const bpToggle = document.getElementById('blueprint-toggle');
     if (bpToggle) {
